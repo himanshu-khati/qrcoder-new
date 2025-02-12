@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta20
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>QR Coder - QR Code Management Software</title>
+    <!-- CSS files -->
+    <link href="./dist/css/tabler.css?1692870487" rel="stylesheet" />
+    <link href="./dist/css/tabler-flags.css?1692870487" rel="stylesheet" />
+    <link href="./dist/css/tabler-payments.css?1692870487" rel="stylesheet" />
+    <link href="./dist/css/tabler-vendors.css?1692870487" rel="stylesheet" />
+    <link href="./dist/css/demo.css?1692870487" rel="stylesheet" />
+    <style>
+      @import url("https://rsms.me/inter/inter.css");
+
+      :root {
+        --tblr-font-sans-serif: "Inter Var", -apple-system, BlinkMacSystemFont,
+          San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+
+      body {
+        font-feature-settings: "cv03", "cv04", "cv11";
+      }
+
+      .text-danger {
+        color: #dc3545;
+        font-size: 0.875rem;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+    <script type="module" src="./checkAuth.js"></script>
+  </head>
+
+  <body>
+    <div class="page">
+      <div
+        id="toast-container"
+        class="toast-container position-fixed top-0 end-0 p-3"
+      ></div>
+      <div id="modal-container"></div>
+
+      <!-- Navbar -->
+      <header class="navbar navbar-expand-md d-print-none">
+        <div class="container-xl">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbar-menu"
+            aria-controls="navbar-menu"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h1
+            class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3"
+          >
+            <a href=".">
+              <img src="./dist/img/cobold.png" width="96px" alt="Cobold" />
+              <span
+                style="
+                  font-size: 14px;
+                  padding-left: 20px;
+                  margin-left: 20px;
+                  border-left: #222 thin solid;
+                  color: #222;
+                "
+                >Event Visitor QR Code Management Software</span
+              >
+            </a>
+          </h1>
+
+          <a id="logoutButton" class="d-none ms-auto nav-link" href="./">
+            <span class="nav-link-icon d-md-none d-lg-inline-block">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M10 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2"
+                />
+                <path d="M15 12h-12l3 -3" />
+                <path d="M6 15l-3 -3" />
+              </svg>
+            </span>
+            <span class="nav-link-title"> Logout </span>
+          </a>
+        </div>
+      </header>
+
+      <div class="page page-center">
+        <div class="container container-tight py-4">
+          <div class="text-center mb-4">
+            <a href="." class="navbar-brand navbar-brand-autodark">
+              <img
+                src="./static/logo.svg"
+                width="110"
+                height="32"
+                alt="Tabler"
+                class="navbar-brand-image"
+              />
+            </a>
+          </div>
+          <!-- enter email and send otp -->
+          <form id="email-form" class="card card-md">
+            <div class="card-body">
+              <h2 class="card-title text-center mb-4">Create new Account</h2>
+              <div class="mb-3">
+                <label class="form-label">Email address</label>
+                <input
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  placeholder="Enter email"
+                  required
+                />
+                <div class="form-footer">
+                  <button
+                    type="button"
+                    id="sendOtpBtn"
+                    class="btn btn-primary w-100"
+                  >
+                    Send OTP
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- full sign up form -->
+          <form
+            class="card card-md hidden"
+            id="signup-form"
+            action="./"
+            method="get"
+            autocomplete="off"
+            novalidate
+          >
+            <div class="card-body">
+              <h2 class="card-title text-center mb-4">Complete Signup</h2>
+              <div class="mb-3">
+                <label class="form-label">First Name</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  class="form-control"
+                  placeholder="Enter First Name"
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Last Name</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  class="form-control"
+                  placeholder="Enter last name"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email address</label>
+                <input
+                  type="email"
+                  id="signupEmail"
+                  class="form-control"
+                  placeholder="Enter email"
+                  readonly
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">OTP</label>
+                <input
+                  type="text"
+                  id="otp"
+                  class="form-control"
+                  placeholder="Enter OTP"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-group input-group-flat">
+                  <input
+                    type="password"
+                    id="password"
+                    class="form-control"
+                    placeholder="Password"
+                    autocomplete="off"
+                  />
+                  <span class="input-group-text">
+                    <a
+                      href="#"
+                      class="link-secondary"
+                      title="Show password"
+                      data-bs-toggle="tooltip"
+                      ><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                        <path
+                          d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"
+                        />
+                      </svg>
+                    </a>
+                  </span>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  class="form-control"
+                  placeholder="Confirm password"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-check">
+                  <input type="checkbox" class="form-check-input" />
+                  <span class="form-check-label"
+                    >Agree the
+                    <a href="./terms-of-service.html" tabindex="-1"
+                      >terms and policy</a
+                    >.</span
+                  >
+                </label>
+              </div>
+              <div class="form-footer">
+                <button type="submit" class="btn btn-primary w-100">
+                  Create new account
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class="text-center text-secondary mt-3">
+            Already have account?
+            <a href="./sign-in.html" tabindex="-1">Sign in</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page Footer -->
+
+      <footer class="footer footer-transparent d-print-none">
+        <div class="container-xl">
+          <div class="row text-center align-items-center flex-row-reverse">
+            <div class="col-lg-auto ms-lg-auto">
+              <ul class="list-inline list-inline-dots mb-0">
+                <li class="list-inline-item">
+                  <a
+                    href="https://cobold.in"
+                    target="_blank"
+                    class="link-secondary"
+                    rel="noopener"
+                    >Cobold Digital LLP</a
+                  >
+                </li>
+                <li class="list-inline-item">
+                  <a
+                    href="#"
+                    target="_blank"
+                    class="link-secondary"
+                    rel="noopener"
+                  >
+                    <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                    Made with
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon text-pink icon-filled icon-inline"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path
+                        d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"
+                      />
+                    </svg>
+                    in India.
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+              <ul class="list-inline list-inline-dots mb-0">
+                <li class="list-inline-item">
+                  Copyright &copy; 2024
+                  <a href="." class="link-secondary">Cobold Digital</a>. All
+                  rights reserved.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Tabler Core -->
+
+    <script src="./dist/js/tabler.min.js?1692870487" defer></script>
+    <script src="./dist/js/demo.min.js?1692870487" defer></script>
+    <script src="./dist/js/demo-theme.js?1692870487"></script>
+    <script type="module" src="./sign-up.js"></script>
+    <script type="module" src="./nav-header.js"></script>
+  </body>
+</html>
