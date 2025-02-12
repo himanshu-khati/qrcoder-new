@@ -7,7 +7,6 @@ export const checkAuth = async () => {
     });
     const data = await response.json();
     const logoutButton = document.getElementById("logoutButton");
-    //hk
     const currentPath = window.location.pathname;
     const isPublicPage =
       currentPath.includes("sign-in.html") ||

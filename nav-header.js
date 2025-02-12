@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const response = await fetch(API_ENDPOINTS.LOGOUT, {
           method: "GET",
           credentials: "include",
+          cache: "no-store",
         });
 
         if (!response.ok) throw new Error("Logout failed");
