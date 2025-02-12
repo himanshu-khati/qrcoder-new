@@ -3,9 +3,18 @@
   "public": true,
   "builds": [
     {
-      "src": "index.php",
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "dist/**/*",
       "use": "@vercel/static"
     }
   ],
-  "routes": [{ "src": "/(.*)", "dest": "/index.php" }]
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
