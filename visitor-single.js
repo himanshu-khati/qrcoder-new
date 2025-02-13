@@ -68,6 +68,9 @@ const fetchVisitorDetails = async () => {
     actualVisitorId = visitor._id;
   } catch (error) {
     showToast(`Failed to load visitor details: ${error.message}`, "danger");
+    setTimeout(() => {
+      window.location.replace("visitor-check-in.html");
+    }, 2000);
   }
 };
 

@@ -602,6 +602,8 @@
 
     <!-- Tabler Core -->
     <script type="module">
+      import { showConfirmModal } from "./utils/confirmModal.js";
+
       document.addEventListener("DOMContentLoaded", async () => {
         try {
           const { default: QrScanner } = await import("./qrscanner.min.js");
@@ -639,9 +641,13 @@
               () => (label.style.color = "inherit"),
               100
             );
-            if (confirm("Valid visitor QR Code found")) {
-              window.location.href = `visitor-single.html?id=${result.data}`;
-            }
+            showConfirmModal({
+              title: "QR Code Scanned",
+              message: "QR Code Scanned. Do you want to proceed?",
+              onConfirm: () => {
+                window.location.href = `visitor-single.html?id=${result.data}`;
+              },
+            });
           }
 
           // ####### Web Cam Scanning #######
