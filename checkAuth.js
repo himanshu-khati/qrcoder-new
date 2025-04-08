@@ -1,60 +1,54 @@
 import { API_ENDPOINTS } from "./utils/constants.js";
+
 export const checkAuth = async () => {
+  const loader = document.getElementById("auth-loader");
+  const mainApp = document.getElementById("main-app");
+  const logoutButton = document.getElementById("logoutButton");
+
+  const currentPath = window.location.pathname;
+  let currentFile = currentPath.split("/").pop();
+
+  if (!currentFile) {
+    currentFile = "index.html";
+  }
+  const PUBLIC_FILES = [
+    "sign-in.html",
+    "sign-up.html",
+    "forgot-password.html",
+    "reset-password.html",
+  ];
+
+  const isPublicPage = PUBLIC_FILES.includes(currentFile);
+
   try {
     const response = await fetch(API_ENDPOINTS.CHECK_AUTH, {
       method: "GET",
       credentials: "include",
     });
     const data = await response.json();
-    const logoutButton = document.getElementById("logoutButton");
-    const currentPath = window.location.pathname;
-    const isPublicPage =
-      currentPath.includes("sign-in.html") ||
-      currentPath.includes("sign-up.html") ||
-      currentPath.includes("forgot-password.html") ||
-      currentPath.includes("reset-password.html");
 
     if (data.success) {
-      if (isPublicPage) {
-        window.location.href = "index.html";
-        return;
-      }
-      // if (
-      //   window.location.pathname.includes("sign-in.html") ||
-      //   window.location.pathname.includes("sign-up.html")
-      // ) {
-      //   window.location.href = "index.html";
-      // }
       if (logoutButton) {
         logoutButton.classList.remove("d-none");
         logoutButton.classList.add("d-flex");
       }
+      loader?.classList.add("d-none");
+      mainApp?.classList.remove("d-none");
     } else {
-      if (logoutButton) {
-        logoutButton.classList.remove("d-flex");
-        logoutButton.classList.add("d-none");
-      }
       if (!isPublicPage) {
         window.location.href = "sign-in.html";
+      } else {
+        loader?.classList.add("d-none");
       }
-      // if (!window.location.pathname.includes("sign-in.html")) {
-      //   window.location.href = "sign-in.html";
-      // }
     }
   } catch (error) {
-    // console.error("Auth check failed:", error);
-    const currentPath = window.location.pathname;
-    const isPublicPage =
-      currentPath.includes("sign-in.html") ||
-      currentPath.includes("sign-up.html");
+    console.error("checkAuth error:", error);
 
     if (!isPublicPage) {
       window.location.href = "sign-in.html";
+    } else {
+      loader?.classList.add("d-none");
     }
-
-    // if (!window.location.pathname.includes("sign-in.html")) {
-    //   window.location.href = "sign-in.html";
-    // }
   }
 };
 
